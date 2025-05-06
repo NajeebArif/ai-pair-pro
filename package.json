@@ -17,7 +17,48 @@
         "command": "pair-programer.helloWorld",
         "title": "Hello World"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "AI Pair Programmer",
+      "properties": {
+        "aiPair.models": {
+          "type": "array",
+          "default": [
+            {
+              "id": "wca",
+              "type": "watsonx",
+              "label": "Watsonx Code Assistant",
+              "endpoint": "",
+              "apiKey": ""
+            },
+            {
+              "id": "ollama-code",
+              "type": "ollama",
+              "label": "Ollama Code Model",
+              "endpoint": "http://localhost:11434",
+              "modelName": "codellama"
+            },
+            {
+              "id": "ollama-general",
+              "type": "ollama",
+              "label": "Ollama General QA",
+              "endpoint": "http://localhost:11434",
+              "modelName": "llama2"
+            }
+          ],
+          "description": "Configure available AI models"
+        },
+        "aiPair.taskMappings": {
+          "type": "object",
+          "default": {
+            "codeCompletion": "wca",
+            "codeReview": "ollama-code",
+            "generalQA": "ollama-general"
+          },
+          "description": "Map tasks to model IDs"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
