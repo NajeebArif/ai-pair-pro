@@ -22,6 +22,11 @@
         "command": "aiPair.openSettings",
         "title": "Open AI Pair Settings",
         "category": "AI Pair"
+      },
+      {
+        "command": "aiPair.openChat",
+        "title": "Open AI Chat",
+        "category": "AI Pair"
       }
     ],
     "configuration": {
@@ -86,6 +91,10 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "@vscode/webview-ui-toolkit": "^1.4.0"
+    "@langchain/community": "^0.3.42",
+    "@langchain/ollama": "^0.2.0",
+    "@vscode/webview-ui-toolkit": "^1.4.0",
+    "langchain": "^0.3.24",
+    "marked": "^15.0.11"
   }
 }

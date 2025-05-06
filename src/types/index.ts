@@ -24,3 +24,20 @@ export type TaskMappingOverride = {
     task: AITask;
     modelId: string;
 };
+
+export interface LLMRequest {
+    prompt: string;
+    task: AITask;
+    overrideModelId?: string;
+    options?: {
+        temperature?: number;
+        maxTokens?: number;
+    };
+}
+
+export interface LLMResponse {
+    success: boolean;
+    content?: string;
+    error?: string;
+    modelUsed?: string;
+}
