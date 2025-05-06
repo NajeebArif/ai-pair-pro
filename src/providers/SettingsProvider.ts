@@ -16,19 +16,26 @@ export class SettingsProvider {
     return SettingsProvider.instance;
   }
 
-  getSettings(): ExtensionSettings {
+  static getSettings(): ExtensionSettings {
+    const _config = vscode.workspace.getConfiguration('aiPair');
     return {
-      models: this.config.get<ModelConfig[]>('models') || [],
-      taskMappings: this.config.get<Record<string, string>>('taskMappings') || {}
+      models: _config.get<ModelConfig[]>('models') || [],
+      taskMappings: _config.get<Record<string, string>>('taskMappings') || {}
     };
   }
 
   async updateSettings(settings: Partial<ExtensionSettings>) {
+    const _config = vscode.workspace.getConfiguration('aiPair');
+    
     if (settings.models) {
-      await this.config.update('models', settings.models, vscode.ConfigurationTarget.Global);
+      await _config.update('models', settings.models, vscode.ConfigurationTarget.Global);
     }
     if (settings.taskMappings) {
-      await this.config.update('taskMappings', settings.taskMappings, vscode.ConfigurationTarget.Global);
+      await _config.update('taskMappings', settings.taskMappings, vscode.ConfigurationTarget.Global);
     }
+    
+    // Force refresh the workspace configuration
+    vscode.workspace.getConfiguration('aiPair').get('models');
+    vscode.workspace.getConfiguration('aiPair').get('taskMappings');
   }
 }
