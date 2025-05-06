@@ -27,6 +27,11 @@
         "command": "aiPair.openChat",
         "title": "Open AI Chat",
         "category": "AI Pair"
+      },
+      {
+        "command": "aiPair.clearChatHistory",
+        "title": "Clear chat history",
+        "category": "AI Pair"
       }
     ],
     "configuration": {
@@ -67,6 +72,14 @@
             "generalQA": "ollama-general"
           },
           "description": "Map tasks to model IDs"
+        },
+        "aiPair.storage": {
+          "type": "object",
+          "default": {
+            "dbPath": "${workspaceFolder}/.vscode/ai-pair-chat.db",
+            "retentionDays": 30
+          },
+          "description": "Chat history storage configuration"
         }
       }
     }
@@ -77,7 +90,9 @@
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src",
-    "test": "vscode-test"
+    "test": "vscode-test",
+    "postinstall": "electron-rebuild",
+    "rebuild": "electron-rebuild -f -w better-sqlite3"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.10",
@@ -87,13 +102,16 @@
     "@typescript-eslint/parser": "^8.31.1",
     "@vscode/test-cli": "^0.0.10",
     "@vscode/test-electron": "^2.5.2",
+    "electron-rebuild": "^3.2.9",
     "eslint": "^9.25.1",
     "typescript": "^5.8.3"
   },
   "dependencies": {
     "@langchain/community": "^0.3.42",
     "@langchain/ollama": "^0.2.0",
+    "@types/better-sqlite3": "^7.6.13",
     "@vscode/webview-ui-toolkit": "^1.4.0",
+    "better-sqlite3": "^11.9.1",
     "langchain": "^0.3.24",
     "marked": "^15.0.11"
   }

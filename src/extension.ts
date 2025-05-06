@@ -3,6 +3,7 @@ import * as vscode from 'vscode';
 import { SettingsWebview } from './webviews/settings/SettingsWebview';
 import { SettingsProvider } from './providers/SettingsProvider';
 import { ChatWebview } from './webviews/chat/ChatWebview';
+import { StorageProvider } from './providers/StorageProvider';
 
 export function activate(context: vscode.ExtensionContext) {
 	const chatWebview = new ChatWebview(context);
@@ -24,6 +25,23 @@ export function activate(context: vscode.ExtensionContext) {
             chatWebview.show();
         })
     );
+
+	// Register command to creat the chat history.
+	context.subscriptions.push(
+		vscode.commands.registerCommand('aiPair.clearChatHistory', async () => {
+			const confirm = await vscode.window.showWarningMessage(
+				'Are you sure you want to clear all chat history?', 
+				{ modal: true }, 
+				'Yes'
+			);
+			
+			if (confirm === 'Yes') {
+				StorageProvider.getInstance().clearAllMessages();
+				ChatWebview.clearHistory();
+				vscode.window.showInformationMessage('Chat history cleared');
+			}
+		})
+	);
 }
 
 // This method is called when your extension is deactivated

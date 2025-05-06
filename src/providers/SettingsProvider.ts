@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { ExtensionSettings, ModelConfig } from '../types';
+import { ExtensionSettings, ModelConfig, StorageConfig } from '../types';
 
 export class SettingsProvider {
   private static instance: SettingsProvider;
@@ -20,7 +20,8 @@ export class SettingsProvider {
     const _config = vscode.workspace.getConfiguration('aiPair');
     return {
       models: _config.get<ModelConfig[]>('models') || [],
-      taskMappings: _config.get<Record<string, string>>('taskMappings') || {}
+      taskMappings: _config.get<Record<string, string>>('taskMappings') || {},
+      storage: _config.get<StorageConfig>('storage') || {dbPath: '', retentionDays: 1}
     };
   }
 
@@ -32,6 +33,9 @@ export class SettingsProvider {
     }
     if (settings.taskMappings) {
       await _config.update('taskMappings', settings.taskMappings, vscode.ConfigurationTarget.Global);
+    }
+    if (settings.storage) {
+      await _config.update('storageConfig', settings.storage, vscode.ConfigurationTarget.Global);
     }
     
     // Force refresh the workspace configuration

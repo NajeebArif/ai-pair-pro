@@ -163,3 +163,59 @@
     border-radius: 3px;
     font-size: 0.9em;
 }
+
+/* Add VS Code codicon font */
+@font-face {
+    font-family: "codicon";
+    src: url("https://microsoft.github.io/vscode-codicons/dist/codicon.ttf");
+}
+
+.codicon {
+    color: var(--vscode-editor-foreground);
+    /* dynamic based on theme */
+}
+
+.chat-header {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--vscode-sideBar-border);
+    background-color: var(--vscode-titleBar-activeBackground);
+}
+
+.chat-header h3 {
+    margin: 0;
+    flex: 1;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--vscode-titleBar-activeForeground);
+}
+
+.icon-button {
+    background: none;
+    border: none;
+    padding: 4px;
+    margin-right: 8px;
+    cursor: pointer;
+    color: var(--vscode-icon-foreground);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+}
+
+.icon-button:hover {
+    background-color: var(--vscode-toolbar-hoverBackground);
+}
+
+.icon-button .codicon {
+    font-family: "codicon";
+    font-size: 14px;
+    display: block !important;
+}
+
+/* Add VS Code codicon font */
+@font-face {
+    font-family: "codicon";
+    font-display: block;
+    src: url(vscode-resource:///vscode/extensions/theme-defaults/themes/icons/vs-seti-icon-theme-1.0.0/codicon.ttf) format("truetype");
+}

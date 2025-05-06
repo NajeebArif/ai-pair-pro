@@ -6,6 +6,7 @@ export function getWebviewContent(context: vscode.ExtensionContext): string {
     const settings = SettingsProvider.getSettings();
     const tasks = Object.values(AITask);
     const models = settings.models;
+    const storageConfig = settings.storage;
 
     return `
   <!DOCTYPE html>
@@ -26,6 +27,7 @@ export function getWebviewContent(context: vscode.ExtensionContext): string {
           <div class="tabs">
               <button class="tab-button active" onclick="switchTab('models')">Models</button>
               <button class="tab-button" onclick="switchTab('tasks')">Task Mapping</button>
+              <button class="tab-button" onclick="switchTab('storage')">Storage</button>
           </div>
 
           <div id="models-tab" class="tab-content">
@@ -45,6 +47,27 @@ export function getWebviewContent(context: vscode.ExtensionContext): string {
                   </div>
               </section>
           </div>
+
+          <!-- Add Storage settings tab content -->
+            <div id="storage-tab" class="tab-content" style="display:none;">
+                <section class="section">
+                <h2>Chat History Storage</h2>
+                <div class="form-group">
+                    <label>Database Path:</label>
+                    <input type="text" 
+                        id="dbPath" 
+                        value="${storageConfig.dbPath}" 
+                        placeholder="Enter database path">
+                </div>
+                <div class="form-group">
+                    <label>Retention (days):</label>
+                    <input type="number" 
+                        id="retentionDays" 
+                        value="${storageConfig.retentionDays}"
+                        min="1" max="365">
+                </div>
+                </section>
+            </div>
 
           <div class="footer">
               <button class="primary" onclick="saveSettings()">💾 Save All Settings</button>
@@ -101,12 +124,18 @@ export function getWebviewContent(context: vscode.ExtensionContext): string {
                   const modelId = item.querySelector('select').value;
                   taskMappings[task] = modelId;
               });
+
+              const storageConfig = {
+                    dbPath: document.getElementById('dbPath').value,
+                    retentionDays: parseInt(document.getElementById('retentionDays').value)
+                };
                   
                   vscode.postMessage({
                       command: 'saveSettings',
                       data: {
                           models: models,
-                          taskMappings: taskMappings
+                          taskMappings: taskMappings,
+                          storage: storageConfig
                       }
                   });
                   
@@ -122,80 +151,6 @@ export function getWebviewContent(context: vscode.ExtensionContext): string {
   </body>
   </html>
 `;
-}
-
-export function getOldHtml(): string {
-    const settings = SettingsProvider.getSettings();
-    const tasks = Object.values(AITask);
-    const models = settings.models;
-    return `
-      <!DOCTYPE html>
-      <html lang="en">
-      <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>AI Pair Settings</title>
-          <style>
-              ${getStyles()}
-          </style>
-      </head>
-      <body>
-          <div class="container">
-              <h1>AI Pair Programming Settings</h1>
-              
-              <section class="models-section">
-                  <h2>Model Configurations</h2>
-                  <div id="models-container">
-                      ${models.map(renderModelForm).join('')}
-                  </div>
-              </section>
-
-              <section class="task-mapping">
-                  <h2>Task Mapping</h2>
-                  <div id="task-mapping-container">
-                      ${tasks.map(task => renderTaskMapping(task, settings.taskMappings[task])).join('')}
-                  </div>
-              </section>
-
-              <button onclick="saveSettings()" type="submit">Save All Settings</button>
-          </div>
-
-          <script>
-              function saveSettings() {
-                  const models = [];
-                  const taskMappings = {};
-
-                  // Collect model data
-                  document.querySelectorAll('.model-form').forEach(form => {
-                      models.push({
-                          id: form.dataset.modelId,
-                          type: form.querySelector('[name="type"]').value,
-                          label: form.querySelector('[name="label"]').value,
-                          endpoint: form.querySelector('[name="endpoint"]').value,
-                          apiKey: form.querySelector('[name="apiKey"]')?.value || '',
-                          modelName: form.querySelector('[name="modelName"]')?.value || ''
-                      });
-                  });
-
-                  // Collect task mappings
-                  document.querySelectorAll('.task-mapping-item').forEach(item => {
-                      const task = item.dataset.task;
-                      const modelId = item.querySelector('select').value;
-                      taskMappings[task] = modelId;
-                  });
-
-                  vscode.postMessage({
-                      command: 'saveSettings',
-                      data: {
-                          models: models,
-                          taskMappings: taskMappings
-                      }
-                  });
-              }
-          </script>
-      </body>
-      </html>
-    `;
 }
 
 export function getStyles(): string {

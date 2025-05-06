@@ -9,6 +9,12 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
+    <div class="chat-header">
+        <button id="clearHistory" class="icon-button" title="Clear chat history">
+            <span class="codicon codicon-trash"></span>
+        </button>
+        <h3>AI Pair Programmer</h3>
+    </div>
     <div class="chat-container">
         <div class="chat-messages" id="messages"></div>
         <div class="input-container">
@@ -16,6 +22,7 @@
             <button id="sendBtn">Send</button>
         </div>
     </div>
+    
     <script src="{{jsUri}}"></script>
 </body>
 </html>

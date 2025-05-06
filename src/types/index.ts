@@ -18,6 +18,7 @@ export type ModelConfig = {
 export type ExtensionSettings = {
     models: ModelConfig[];
     taskMappings: Record<AITask, string>;
+    storage: StorageConfig;
 };
 
 export type TaskMappingOverride = {
@@ -25,6 +26,12 @@ export type TaskMappingOverride = {
     modelId: string;
 };
 
+export interface StorageConfig {
+    dbPath: string;
+    retentionDays: number;
+}
+
+// LLM Types.
 export interface LLMRequest {
     prompt: string;
     task: AITask;
@@ -40,4 +47,21 @@ export interface LLMResponse {
     content?: string;
     error?: string;
     modelUsed?: string;
+}
+
+// Chat Message Type
+export interface ChatMessage {
+    id: string;
+    content: string;
+    role: 'user' | 'bot';
+    timestamp: number;
+    modelId?: string;
+    task?: AITask;
+}
+
+export function isChatMessage(row: any): row is ChatMessage {
+    return typeof row.id === 'string' &&
+        typeof row.content === 'string' &&
+        (row.role === 'user' || row.role === 'bot') &&
+        typeof row.timestamp === 'number';
 }
