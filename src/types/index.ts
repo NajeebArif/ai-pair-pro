@@ -4,23 +4,23 @@ export enum AITask {
     GeneralQA = 'generalQA',
     CodeExplanation = 'codeExplanation',
     TestGeneration = 'testGeneration'
-  }
-  
-  export type ModelConfig = {
+}
+
+export type ModelConfig = {
     id: string;
     type: 'watsonx' | 'ollama';
     label: string;
     endpoint: string;
     apiKey?: string;
     modelName?: string;
-  };
-  
-  export type ExtensionSettings = {
+};
+
+export type ExtensionSettings = {
     models: ModelConfig[];
     taskMappings: Record<AITask, string>;
-  };
-  
-  export type TaskMappingOverride = {
+};
+
+export type TaskMappingOverride = {
     task: AITask;
     modelId: string;
-  };
+};

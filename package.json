@@ -15,7 +15,13 @@
     "commands": [
       {
         "command": "pair-programer.helloWorld",
-        "title": "Hello World"
+        "title": "Hello World",
+        "category": "AI Pair"
+      },
+      {
+        "command": "aiPair.openSettings",
+        "title": "Open AI Pair Settings",
+        "category": "AI Pair"
       }
     ],
     "configuration": {
