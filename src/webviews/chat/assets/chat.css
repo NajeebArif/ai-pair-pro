@@ -164,17 +164,6 @@
     font-size: 0.9em;
 }
 
-/* Add VS Code codicon font */
-@font-face {
-    font-family: "codicon";
-    src: url("https://microsoft.github.io/vscode-codicons/dist/codicon.ttf");
-}
-
-.codicon {
-    color: var(--vscode-editor-foreground);
-    /* dynamic based on theme */
-}
-
 .chat-header {
     display: flex;
     align-items: center;
@@ -218,4 +207,25 @@
     font-family: "codicon";
     font-display: block;
     src: url(vscode-resource:///vscode/extensions/theme-defaults/themes/icons/vs-seti-icon-theme-1.0.0/codicon.ttf) format("truetype");
+}
+
+.message-meta {
+    font-size: 0.8em;
+    color: var(--vscode-descriptionForeground);
+    margin-bottom: 0.5rem;
+    opacity: 0.7;
+}
+
+.input-controls {
+    display: flex;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+#modelOverride {
+    flex: 1;
+    background: var(--vscode-dropdown-background);
+    color: var(--vscode-dropdown-foreground);
+    border: 1px solid var(--vscode-dropdown-border);
+    padding: 0.25rem;
 }

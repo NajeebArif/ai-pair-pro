@@ -103,4 +103,15 @@ export class LangChainProvider {
         const llm = await this.getLLMForTask(task, overrideModelId);
         return llm.invoke(prompt, options);
     }
+
+    getModelIdForTask(task: AITask): string {
+        const settings = SettingsProvider.getSettings();
+        const modelId = settings.taskMappings[task];
+        
+        if (!modelId || !this.models.has(modelId)) {
+            throw new Error(`No valid model configured for task ${task}`);
+        }
+        
+        return modelId;
+    }
 }
