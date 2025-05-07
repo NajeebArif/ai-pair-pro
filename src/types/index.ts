@@ -34,7 +34,7 @@ export interface StorageConfig {
 // LLM Types.
 export interface LLMRequest {
     prompt: string;
-    task: AITask;
+    task?: AITask;
     overrideModelId?: string;
     options?: {
         temperature?: number;
@@ -47,6 +47,7 @@ export interface LLMResponse {
     content?: string;
     error?: string;
     modelUsed?: string;
+    task?: AITask;
 }
 
 // Chat Message Type

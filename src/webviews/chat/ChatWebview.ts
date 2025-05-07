@@ -60,7 +60,6 @@ export class ChatWebview {
     }
 
     private async handleClearHistory(panel: vscode.WebviewPanel) {
-        console.log("TRYING TO CLEAR THE HISTORY!!.")
         const confirm = await vscode.window.showWarningMessage(
             'Are you sure you want to clear all chat history?',
             { modal: true },
@@ -92,7 +91,11 @@ export class ChatWebview {
                 task: AITask.GeneralQA
             };
 
-            const response = await LLMService.getInstance().generateCompletion(request);
+            // const response = await LLMService.getInstance().generateCompletion(request);
+            const response = await LLMService.getInstance().generateCompletionV2({
+                prompt: message.text,
+                overrideModelId: message.overrideModel
+              });
 
             // Process response...
             const botMessage: ChatMessage = {
@@ -108,13 +111,22 @@ export class ChatWebview {
             StorageProvider.getInstance().saveMessage(botMessage);
             this.history.unshift(botMessage);
 
+            // panel.webview.postMessage({
+            //     command: 'receiveMessage',
+            //     content: response.success ? response.content : `Error: ${response.error}`,
+            //     isBot: true,
+            //     error: false
+            // });
             panel.webview.postMessage({
                 command: 'receiveMessage',
                 content: response.success ? response.content : `Error: ${response.error}`,
                 isBot: true,
+                task: response.task,
+                model: response.modelUsed,
                 error: false
             });
         } catch (err) {
+            console.log(`Error while fetching the response: ${err}`);
             panel.webview.postMessage({
                 command: 'receiveMessage',
                 content: `Error: ${err}`,

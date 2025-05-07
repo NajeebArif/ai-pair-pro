@@ -25,9 +25,17 @@
         return container;
     }
 
-    function addMessage(text, isBot = false, isError = false) {
+    function addMessage(text, isBot = false, isError = false, meta = {}) {
         const messageEl = document.createElement('div');
         messageEl.className = `message ${isBot ? 'bot-message' : 'user-message'} ${isError ? 'error-message' : ''}`;
+
+        // Add metadata badge
+        if (isBot && meta.task && meta.model) {
+            const metaBadge = document.createElement('div');
+            metaBadge.className = 'message-meta';
+            metaBadge.textContent = `${meta.task} • ${meta.model}`;
+            messageEl.appendChild(metaBadge);
+        }
 
         // Parse think section
         const thinkMatch = text.match(/<think>([\s\S]*?)<\/think>([\s\S]*)/i);
@@ -84,9 +92,11 @@
         const text = input.value.trim();
         if (text) {
             addMessage(text);
+            const overrideModel = document.getElementById('modelOverride').value;
             vscode.postMessage({
                 command: 'sendMessage',
-                text: text
+                text: text,
+                overrideModel: overrideModel || undefined
             });
             input.value = '';
         }
@@ -94,7 +104,7 @@
 
     window.addEventListener('message', event => {
         if (event.data.command === 'receiveMessage') {
-            addMessage(event.data.content, true);
+            addMessage(event.data.content, true, false, {task: event.data.task, model: event.data.model});
         }
     });
 
@@ -122,4 +132,6 @@
             document.getElementById('messages').innerHTML = '';
         }
     });
+
+    
 })();
