@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { ExtensionSettings, ModelConfig, StorageConfig } from '../types';
+import { AITask, ExtensionSettings, ModelConfig, MonitoringConfig, StorageConfig } from '../types';
 
 export class SettingsProvider {
   private static instance: SettingsProvider;
@@ -21,8 +21,21 @@ export class SettingsProvider {
     return {
       models: _config.get<ModelConfig[]>('models') || [],
       taskMappings: _config.get<Record<string, string>>('taskMappings') || {},
-      storage: _config.get<StorageConfig>('storage') || {dbPath: '', retentionDays: 1}
+      storage: _config.get<StorageConfig>('storage') || {dbPath: '', retentionDays: 1},
+      monitoring: _config.get<MonitoringConfig>('monitoring') || {enabled: false, contextLines: 20, tasks: [AITask.CodeReview], interval: 2000}
     };
+  }
+
+  static getMonitoringConfig(): MonitoringConfig {
+    return this.getSettings().monitoring;
+  }
+  
+  static async updateMonitoringConfig(config: Partial<MonitoringConfig>) {
+    const _config = vscode.workspace.getConfiguration('aiPair');
+    await _config.update('monitoring', 
+      { ...SettingsProvider.getMonitoringConfig(), ..._config },
+      vscode.ConfigurationTarget.Global
+    );
   }
 
   async updateSettings(settings: Partial<ExtensionSettings>) {
@@ -35,11 +48,16 @@ export class SettingsProvider {
       await _config.update('taskMappings', settings.taskMappings, vscode.ConfigurationTarget.Global);
     }
     if (settings.storage) {
-      await _config.update('storageConfig', settings.storage, vscode.ConfigurationTarget.Global);
+      await _config.update('storage', settings.storage, vscode.ConfigurationTarget.Global);
+    }
+    if (settings.monitoring) {
+      await _config.update('monitoring', settings.monitoring, vscode.ConfigurationTarget.Global);
     }
     
     // Force refresh the workspace configuration
     vscode.workspace.getConfiguration('aiPair').get('models');
     vscode.workspace.getConfiguration('aiPair').get('taskMappings');
+    vscode.workspace.getConfiguration('aiPair').get('storage');
+    vscode.workspace.getConfiguration('aiPair').get('monitoring');
   }
 }

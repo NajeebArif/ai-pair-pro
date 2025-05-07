@@ -19,6 +19,7 @@ export type ExtensionSettings = {
     models: ModelConfig[];
     taskMappings: Record<AITask, string>;
     storage: StorageConfig;
+    monitoring: MonitoringConfig;
 };
 
 export type TaskMappingOverride = {
@@ -65,4 +66,19 @@ export function isChatMessage(row: any): row is ChatMessage {
         typeof row.content === 'string' &&
         (row.role === 'user' || row.role === 'bot') &&
         typeof row.timestamp === 'number';
+}
+
+export interface MonitoringConfig {
+    enabled: boolean;
+    contextLines: number;
+    tasks: AITask[];
+    interval: number;
+}
+
+export interface CodeIssue {
+    type: 'performance' | 'antipattern' | 'security';
+    severity: 'high' | 'medium' | 'low';
+    description: string;
+    suggestion: string;
+    lineRange: [number, number];
 }

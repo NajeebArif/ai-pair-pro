@@ -7,6 +7,7 @@ export function getWebviewContent(context: vscode.ExtensionContext): string {
     const tasks = Object.values(AITask);
     const models = settings.models;
     const storageConfig = settings.storage;
+    const monitoring = settings.monitoring;
 
     return `
   <!DOCTYPE html>
@@ -28,6 +29,7 @@ export function getWebviewContent(context: vscode.ExtensionContext): string {
               <button class="tab-button active" onclick="switchTab('models')">Models</button>
               <button class="tab-button" onclick="switchTab('tasks')">Task Mapping</button>
               <button class="tab-button" onclick="switchTab('storage')">Storage</button>
+              <button class="tab-button" onclick="switchTab('monitoring')">Monitoring</button>
           </div>
 
           <div id="models-tab" class="tab-content">
@@ -67,6 +69,27 @@ export function getWebviewContent(context: vscode.ExtensionContext): string {
                         min="1" max="365">
                 </div>
                 </section>
+            </div>
+
+            <div id="monitoring-tab" class="tab-content" style="display:none;">
+            <section class="section">
+                <h2>Code Monitoring</h2>
+                <div class="form-group">
+                <label>Enabled:</label>
+                <input type="checkbox" id="monitoringEnabled" 
+                        ${monitoring.enabled ? 'checked' : ''}>
+                </div>
+                <div class="form-group">
+                <label>Context Lines:</label>
+                <input type="number" id="contextLines" 
+                        value="${monitoring.contextLines}" min="5" max="50">
+                </div>
+                <div class="form-group">
+                <label>Analysis Interval (ms):</label>
+                <input type="number" id="monitoringInterval" 
+                        value="${monitoring.interval}" min="500" max="10000">
+                </div>
+            </section>
             </div>
 
           <div class="footer">

@@ -32,6 +32,16 @@
         "command": "aiPair.clearChatHistory",
         "title": "Clear chat history",
         "category": "AI Pair"
+      },
+      {
+        "command": "aiPair.enableCodeMonitoring",
+        "title": "Enable Code Monitoring",
+        "category": "AI Pair"
+      },
+      {
+        "command": "aiPair.disableCodeMonitoring",
+        "title": "Disable Code Monitoring",
+        "category": "AI Pair"
       }
     ],
     "configuration": {
@@ -80,6 +90,16 @@
             "retentionDays": 30
           },
           "description": "Chat history storage configuration"
+        },
+        "aiPair.monitoring": {
+          "type": "object",
+          "default": {
+            "enabled": false,
+            "contextLines": 10,
+            "tasks": ["codeReview", "performanceCheck"],
+            "interval": 2000
+          },
+          "description": "Continuous code monitoring configuration"
         }
       }
     }
